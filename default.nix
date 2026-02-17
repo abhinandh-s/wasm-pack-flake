@@ -35,9 +35,8 @@ stdenv.mkDerivation {
     meta = with lib; {
       description = "Your favorite rust -> wasm workflow tool";
       homepage = "https://github.com/rustwasm/wasm-pack";
-      # This maps the strings ["asl20" "mit"] to [lib.licenses.asl20 lib.licenses.mit]
-      # The or k ensures that if a key is missing, Nix just returns the string instead of crashing the whole evaluation.
-      license = map (k: licenses.${k} or k) sources.licenseKeys;
+      # This ["asl20" "mit"] to [lib.licenses.asl20 lib.licenses.mit]
+      license = licenses.mit;
       platforms = builtins.attrNames sources.assets;
       mainProgram = "wasm-pack";
     };
