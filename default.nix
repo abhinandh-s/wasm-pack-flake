@@ -1,5 +1,4 @@
 {
-  lib,
   stdenv,
   fetchurl,
 }:
@@ -7,37 +6,22 @@ let
   sources = import ./sources.nix;
   system = stdenv.hostPlatform.system;
 
-  # Access 'assets' attribute created by the Rust script
-  asset = sources.assets.${system} or (throw "Unsupported system: ${system}");
+  # Specify which repo from sources.nix you want to package here
+  repoData = sources."wasm-pack" or (throw "wasm-pack not found in sources.nix");
+
+  # Access assets for the current system from that specific repo
+  asset = repoData.assets.${system} or (throw "Unsupported system: ${system} for wasm-pack");
 in
 stdenv.mkDerivation {
   pname = "wasm-pack";
-  version = sources.version; # Uses the version from Rust/GitHub API
+  version = repoData.version; 
 
   src = fetchurl {
-    url = asset.url;   # Use the full URL from sources.nix
-    hash = asset.hash; # Uses the "sha256:..." hex format
+    inherit (asset) url hash;
   };
 
-  sourceRoot = ".";
-
+  # Since it's a pre-compiled binary, we just install it
   installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/bin
-    # Search for the binary in the unpacked source
-    find . -maxdepth 2 -name "wasm-pack" -type f -exec cp {} $out/bin/ \;
-    chmod +x $out/bin/wasm-pack
-
-    runHook postInstall
+    install -m755 -D $src $out/bin/wasm-pack
   '';
-
-    meta = with lib; {
-      description = "Your favorite rust -> wasm workflow tool";
-      homepage = "https://github.com/rustwasm/wasm-pack";
-      # This ["asl20" "mit"] to [lib.licenses.asl20 lib.licenses.mit]
-      license = licenses.mit;
-      platforms = builtins.attrNames sources.assets;
-      mainProgram = "wasm-pack";
-    };
 }
