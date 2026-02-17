@@ -1,3 +1,4 @@
+# This file was automatically generated. Do not edit manually.
 {
   version = "v0.14.0";
   assets = {
