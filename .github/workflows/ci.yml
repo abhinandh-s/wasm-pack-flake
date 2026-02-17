@@ -14,11 +14,11 @@ jobs:
     
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@master
+        uses: actions/checkout@v4
 
       - name: Run Nix Source Updater
         # Points to your Action repo and the version tag
-        uses: abhinandh-s/nix-update-action@v1.0.0 
+        uses: abhinandh-s/nix-update-action@master #v1.0.0 
         with:
           owner: 'drager'
           repo: 'wasm-pack'
