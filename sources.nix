@@ -18,5 +18,4 @@
       hash = "sha256:278a8d668085821f4d1a637bd864f1713f872b0ae3a118c77562a308c0abfe8d";
     };
   };
-  licenseKeys = [ "asl20" "mit" ];
 }
