@@ -22,7 +22,6 @@ jobs:
         with:
           repositories: |
             drager/wasm-pack
-            abhinandh-s/roxide
 
       - name: Commit and Push Changes
         run: |
